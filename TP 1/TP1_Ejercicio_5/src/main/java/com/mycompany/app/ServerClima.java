@@ -2,7 +2,10 @@ package com.mycompany.app;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -24,18 +27,32 @@ public class ServerClima {
 	}
 
 	private void handleRequest(Socket clientSocket) throws IOException {
+		System.out.println("Cliente entrante!");
+
+		InputStream inputStream = clientSocket.getInputStream();
 		OutputStream outputStream = clientSocket.getOutputStream();
-		PrintWriter out = new PrintWriter(outputStream, true);
 		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		PrintWriter writer = new PrintWriter(outputStream, true);
+
 		try {
+			System.out.println("Leyendo...");
+			reader.readLine();
+
 			WeatherApp app = new WeatherApp();
 			String res = craftResponse(app.getWeather());
+			System.out.println("===");
+			System.out.println(res);
+			System.out.println("===");
 
-			out.print(res);
+			writer.println(res);
 		} catch (Exception e) {
-			out.print("Hubo un error.");
+			writer.println("Hubo un error.");
 		}
 
+		System.out.println("Cerrando socket");
+		writer.close();
+		reader.close();
 		clientSocket.close();
 	}
 
