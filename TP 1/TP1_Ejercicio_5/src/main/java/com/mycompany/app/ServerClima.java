@@ -1,73 +1,52 @@
 package com.mycompany.app;
 
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.io.BufferedReader;
+import java.util.logging.FileHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.registry.LocateRegistry;
 
-/**
- * 
- * Hello world!
- */
+// Imports de Logger
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
 public class ServerClima {
+	final int port = 9090;
 
-	private int portNumber = 8080;
-
-	private String craftResponse(String text) {
-		String response = "HTTP/1.1 200 OK\n";
-		response += "Content-Type: text/htm\n";
-		response += "<html>\n<body>\n";
-		response += "<h1>" + text + "</h1>\n";
-		response += "</body>\n</html>\n";
-		return response;
-	}
-
-	private void handleRequest(Socket clientSocket) throws IOException {
-		System.out.println("Cliente entrante!");
-
-		InputStream inputStream = clientSocket.getInputStream();
-		OutputStream outputStream = clientSocket.getOutputStream();
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-		PrintWriter writer = new PrintWriter(outputStream, true);
-
-		try {
-			System.out.println("Leyendo...");
-			reader.readLine();
-
-			WeatherApp app = new WeatherApp();
-			String res = craftResponse(app.getWeather());
-			System.out.println("===");
-			System.out.println(res);
-			System.out.println("===");
-
-			writer.println(res);
-		} catch (Exception e) {
-			writer.println("Hubo un error.");
-		}
-
-		System.out.println("Cerrando socket");
-		writer.close();
-		reader.close();
-		clientSocket.close();
-	}
+	// private final Logger log = LoggerFactory.getLogger(Servidor.class);
+	private final Logger log = Logger.getLogger(ServerClima.class.getName());
+	private FileHandler fh;
 
 	public ServerClima() {
-		try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
-			while (true) {
-				Socket clientSocket = serverSocket.accept();
-				handleRequest(clientSocket);
-			}
+		try {
+			this.fh = new FileHandler("logFile.log", true);
+			SimpleFormatter formatter = new SimpleFormatter();
+			fh.setFormatter(formatter);
+			this.log.addHandler(this.fh);
+
+			this.log.info("Server escuchando en el puerto: " + port);
+			System.out.println("=====================================");
+
+			Registry serverRMI = LocateRegistry.createRegistry(port);
+			System.out.println("RMI Registry se inicio en el puerto: " + port);
+
+			WeatherApp app = new WeatherApp(this.log);
+			WeatherInterface srvclima = (WeatherInterface) UnicastRemoteObject.exportObject(app, 6666);
+			
+			serverRMI.rebind("Info-clima", srvclima);
+			System.out.println("¡¡Servidor levantado con exito!");
 		} catch (IOException e) {
-			System.out.println("Error al crear el servidor: " + e.getMessage());
+			log.severe("No se pudo abrir el fichero");
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			log.severe("Hubo un problema con la seguridad del fileSystem");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-		ServerClima serv = new ServerClima();
+		ServerClima ser = new ServerClima();
 	}
 }

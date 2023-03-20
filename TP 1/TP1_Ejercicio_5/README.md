@@ -1,34 +1,9 @@
-# 01 - Basic Mvn Java APP
-
-The repository contains a simple Java application which outputs the string
-"Hello world!" 
-
-# Topics covered
-. GIT -> https/ssh -> ssh cloning repositories.
-. MANAGERS 
-.. mvn version manager.
-.. java version manager.
-.. node version manager.
-
-. pom.xml restrictions.
-. mvn configurations.
-. jar.
-. docker.
-
-# Configure SSH key 
-
-Debemos evaluar si está corriendo el servidor de ssh en nuestro equipo:
-eval $(ssh-agent -s)
-
-Create ssh key with the following command
-ssh-keygen -f ~/.ssh/id_rsa_personal -t ecdsa -N '' -C "-mail-@gmail.com"
-ssh-add ~/.ssh/id_rsa_personal
-
-Add to configfile (.ssh/config) the hostname and git service host 
-
-```sh
-Host github.com-personal
-        User git
-        Hostname github.com
-        IdentityFile /home/david/.ssh/id_rsa_personal
-```
+Conclusión:
+    Se pudo emplear el servidor utilizando RMI, permitiendo publicar un objeto en la misma máquina. 
+    Las pruebas realizadas demuestran que el objeto pudo ser utilizado por el cliente, retornando la temperatura actual (generada aleatoriamente)
+--------------------
+Pasos a seguir para la prueba:
+1.Acceder a la carpeta jars.
+2.Ejecutar el comnado "java -jar Servidor.jar"
+3.Ejecutar el comnado "java -jar Cliente.jar"
+4.En el cliente se deberá ingresar la ip donde esta el servidor.

@@ -1,7 +1,10 @@
 package com.mycompany.app;
 
-public interface WeatherInterface {
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface WeatherInterface extends Remote{
   
-  public String getWeather();
+  public String getWeather() throws RemoteException;
 
 }
