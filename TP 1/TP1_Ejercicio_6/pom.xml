@@ -36,6 +36,20 @@
     </pluginManagement>
     <plugins>
       <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <executions>
+              <execution>
+                  <phase>prepare-package</phase>
+                  <goals>
+                      <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                      <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+      <plugin>
         <!-- Build an executable JAR -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -45,7 +59,8 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.mycompany.app.ServerSumaVec</mainClass>
+              <mainClass>com.mycompany.app.Client</mainClass>
+              <!--  <mainClass>com.mycompany.app.App</mainClass>-->
             </manifest>
           </archive>
         </configuration>

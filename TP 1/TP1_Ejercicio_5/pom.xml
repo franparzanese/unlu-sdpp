@@ -39,7 +39,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.mycompany.app.Client</mainClass>
+              <mainClass>com.mycompany.app.ServerSumaVec</mainClass>
             </manifest>
           </archive>
         </configuration>
