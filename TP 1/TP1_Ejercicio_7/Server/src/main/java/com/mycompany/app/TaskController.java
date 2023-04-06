@@ -1,19 +1,19 @@
 package com.mycompany.app;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.WaitContainerResultCallback;
-import com.github.dockerjava.api.model.ContainerConfig;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
 
 @RestController
 public class TaskController {
@@ -26,73 +26,57 @@ public class TaskController {
   @PostMapping("/genericTask")
   @ResponseBody
   public String genericTask(@RequestBody Task task) {
-    System.out.println("Json que llega: " + task.toString());
-
+    String response = "";
     try {
-      // Construye el comando para compilar el archivo Java
-      String[] javacCmd = { "javac", "MiClase.java" };
+      HttpClient client = HttpClient.newHttpClient();
 
-      // Compila el archivo Java
-      ProcessBuilder pb = new ProcessBuilder(javacCmd);
-      pb.directory(new File("ruta/al/directorio/del/archivo/java"));
-      Process p = pb.start();
-      int exitCode = p.waitFor();
+      // Comandos
+      // Servicio-tarea corre en el puerto 8080, lo expongo como 9090
+      String imageName = "servicio-tarea";
+      String port_service = "9090";
+      // String command = "docker run --rm -d --name=" + imageName + "_levantado -p "
+      // + port_service + ":8080 " + imageName;
+      // Crea el comando Docker que quieres ejecutar
+      String[] command = { "docker", "run", "--rm", "-d", "--name=" + imageName + "_levantado", "-p",
+          port_service + ":8080", imageName };
 
-      // Construye el comando para crear y ejecutar el contenedor Docker
-      String[] dockerCmd = { "docker", "run", "-it", "--rm", "-v", "/ruta/al/directorio/del/archivo/java:/app",
-          "openjdk:latest", "java", "MiClase" };
+      ProcessBuilder processBuilder = new ProcessBuilder(command);
+      Process process = processBuilder.start();
 
-      // Crea y ejecuta el contenedor Docker
-      pb = new ProcessBuilder(dockerCmd);
-      p = pb.start();
-      exitCode = p.waitFor();
+      // El servicio está lvantandose
+      Thread.sleep(15000);
 
-      // Imprime el código de salida del proceso
-      System.out.println("Código de salida: " + exitCode);
-    } catch (Exception e) {
-      System.out.println("=== Hubo un error ===");
-    }
-
-    return "Greetings from Spring Bootsa!";
-    // System.out.println("Llega un json: " + task);
-    // return task.getName();
-  }
-
-  public String ejecutarTareaRemota(String taskName) {
-    String response = "Ese servicio es invlido";
-    try {
-      switch (taskName) {
-        case "random":
-          response = taskRandom();
-          break;
-
-        default:
-          break;
+      System.out.println("=====");
+      // Obtén la salida del comando
+      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      String line;
+      while ((line = reader.readLine()) != null) {
+        System.out.println(line);
       }
-    } catch (Exception e) {
+      // Espera a que el proceso termine
+      int exitCode = process.waitFor();
+      System.out.println("El comando terminó con el código de salida " + exitCode);
+      System.out.println("=====");
 
+      String ip_service = "127.0.0.1";
+      String url = "http://" + ip_service + ":" + port_service + "/" + task.getName();
+      System.out.println("Connecting with server...");
+      HttpRequest request = HttpRequest.newBuilder()
+          .uri(URI.create(url))
+          .GET()
+          .build();
+      System.out.println("Peticion armada...");
+      HttpResponse<String> response_service = client.send(request, HttpResponse.BodyHandlers.ofString());
+      System.out.println("Response body:");
+      System.out.println(response_service.body());
+
+      response = response_service.body();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+      response = "=== Hubo un error en el sevidor ===";
     }
 
-    return response;
-  }
-
-  public String taskRandom() {
-    String response = "Hubo un error en servicio Random";
-    try {
-      // Crea una instancia del cliente de docker
-      DockerClient dockerClient = DockerClientBuilder.getInstance().build();
-
-      // Levanta el contenedor Random
-      String containerId = dockerClient.createContainerCmd("Task-Random").exec().getId();
-      dockerClient.startContainerCmd(containerId).exec();
-
-      dockerClient.waitContainerCmd(containerId).exec(new WaitContainerResultCallback()).awaitStatusCode();
-      ContainerExitResult exitResult = dockerClient.inspectContainerCmd(containerId).exec().getState().getExitCode();
-      System.out.println("Valor de salida: " + exitResult);
-
-    } catch (Exception e) {
-
-    }
     return response;
   }
 
