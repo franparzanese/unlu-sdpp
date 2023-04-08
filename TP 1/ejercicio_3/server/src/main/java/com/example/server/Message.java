@@ -18,7 +18,7 @@ public class Message {
 	public Message(String destination, String message) throws IllegalArgumentException {
 		if (destination.isEmpty()) throw new IllegalArgumentException("Se debe especificar el destinatario.");
 		if (message.isEmpty()) throw new IllegalArgumentException("El mensaje no debe ser vacío.");
-		this.destination = destination.toLowerCase();
+		this.destination = destination.trim().toLowerCase();
 		this.message = message;
 	}
 

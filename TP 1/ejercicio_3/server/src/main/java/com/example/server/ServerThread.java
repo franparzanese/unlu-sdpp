@@ -53,7 +53,8 @@ public class ServerThread implements Runnable {
 				user = br.readLine();
 			}
 			pw.println("ack");
-			user = user.toLowerCase();
+			// Sanitiza el nombre de usuario.
+			user = user.trim().toLowerCase();
 
 			// Solicita una opción del menú.
 			while (true) {
@@ -88,7 +89,7 @@ public class ServerThread implements Runnable {
 		} else {
 			pw.println("Tienes " + messages.size() + " mensajes:");
 			for (int i = 0; i < messages.size(); i++) {
-				pw.println("");
+				pw.println();
 				pw.println(">>> " + messages.get(i).getMessage());
 			}
 		}
