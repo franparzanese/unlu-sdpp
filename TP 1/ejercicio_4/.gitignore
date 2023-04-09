@@ -1,0 +1,3 @@
+# Archivos compilados por Maven, trackea solo el JAR.
+/*/target/**
+!/*/target/*.jar
