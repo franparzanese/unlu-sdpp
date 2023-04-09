@@ -1,7 +1,6 @@
 package com.example.server;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -82,7 +81,7 @@ public class ServerThread implements Runnable {
 	/**
 	 * Envía los mensajes del usuario al cliente.
 	 */
-	private void retrieveMessages() throws IOException {
+	private void retrieveMessages() throws Exception {
 		pw.println("ack");
 		ArrayList<Message> messages = queue.getMessages(user);
 		if (messages.isEmpty()) {
