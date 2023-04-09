@@ -32,19 +32,20 @@ public class TaskController {
 
       // Comandos
       // Servicio-tarea corre en el puerto 8080, lo expongo como 9090
-      String imageName = "servicio-tarea";
+      String imageName = "sebmarch/tp1-e7-servicio:latest";
       String port_service = "9090";
       // String command = "docker run --rm -d --name=" + imageName + "_levantado -p "
       // + port_service + ":8080 " + imageName;
       // Crea el comando Docker que quieres ejecutar
-      String[] command = { "docker", "run", "--rm", "-d", "--name=" + imageName + "_levantado", "-p",
-          port_service + ":8080", imageName };
-
+      String[] command = { "docker", "run", "-d", "--rm", "-p", port_service + ":8080", imageName };
+      for (int i = 0; i < command.length; i++) {
+        System.out.print(command[i] + " ");
+      }
       ProcessBuilder processBuilder = new ProcessBuilder(command);
       Process process = processBuilder.start();
 
       // El servicio está lvantandose
-      Thread.sleep(15000);
+      Thread.sleep(20000);
 
       System.out.println("=====");
       // Obtén la salida del comando
