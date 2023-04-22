@@ -22,7 +22,7 @@ java -jar Server.jar
 java -jar Client.jar
 ```
 
-4. Ingresar en el cliente la dirección IP del servidor.
+4. Ingresar en el cliente la dirección IP y el puerto del servidor.
 
 ## Conclusión
 
