@@ -1,0 +1,24 @@
+mar. 21, 2023 1:47:49 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: Server escuchando en el puerto: 9090
+mar. 21, 2023 1:47:51 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: RMI Registry se inicio en el puerto: 9090
+mar. 21, 2023 1:47:51 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: ¡¡Servidor levantado con exito!
+mar. 21, 2023 1:52:36 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: Server escuchando en el puerto: 9090
+mar. 21, 2023 1:52:37 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: RMI Registry se inicio en el puerto: 9090
+mar. 21, 2023 1:52:38 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: ¡¡Servidor levantado con exito!
+mar. 21, 2023 1:53:02 P. M. com.mycompany.app.ServiceSum getSumaVectores
+INFORMACIÓN: Suma vectores has been called
+mar. 21, 2023 1:53:02 P. M. com.mycompany.app.ServiceSum getSumaVectores
+INFORMACIÓN: Server is returning: 2-4-6-8-10-12-14-16-18-20-
+mar. 21, 2023 1:53:02 P. M. com.mycompany.app.ServiceSum getSumaVecObjetos
+INFORMACIÓN:  Suma Objetos  has been called 
+mar. 21, 2023 1:53:02 P. M. com.mycompany.app.ServiceSum getSumaVecObjetos
+INFORMACIÓN: Server is returning  {"v1":[0,0,0,0,0,0,0,0,0,0],"v2":[0,0,0,0,0,0,0,0,0,0],"v3":[2,4,6,8,10,12,14,16,18,20]}
+mar. 22, 2023 6:20:30 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: Server escuchando en el puerto: 9090
+mar. 22, 2023 6:20:31 P. M. com.mycompany.app.ServerSumaVec <init>
+INFORMACIÓN: RMI Registry se inicio en el puerto: 9090
